@@ -78,7 +78,7 @@ export default function ForgotPasswordPage() {
             <div className="space-y-4">
               <div className="text-center text-sm text-muted-foreground">
                 <p>
-                  Ti abbiamo inviato un'email con le istruzioni per reimpostare
+                  Ti abbiamo inviato un&apos;email con le istruzioni per reimpostare
                   la tua password.
                 </p>
                 <p className="mt-2">

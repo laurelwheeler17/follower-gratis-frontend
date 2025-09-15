@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -21,7 +21,7 @@ import { CardFooter } from "@/components/ui/card";
 import { toast } from "react-toastify";
 import api from "@/lib/axios";
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState<string>("");
   const searchParams = useSearchParams();
@@ -123,5 +123,35 @@ export default function ResetPasswordPage() {
         </CardFooter>
       </Card>
     </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="flex justify-center mb-4">
+            <span className="text-2xl font-bold text-slate-800 mr-2">
+              <span className="text-[#2150C2]">Follower</span>
+              <span className="text-[#CD41B4]">Gratis</span>
+            </span>
+          </div>
+          <CardTitle className="text-2xl">Reimposta Password</CardTitle>
+          <CardDescription>Caricamento...</CardDescription>
+        </CardHeader>
+        <CardContent className="flex justify-center">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }
