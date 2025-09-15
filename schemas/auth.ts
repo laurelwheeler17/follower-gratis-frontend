@@ -57,6 +57,22 @@ export const forgotPasswordSchema = z.object({
   email: z.string().email("Indirizzo email non valido"),
 });
 
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1, "Token richiesto"),
+  newPassword: z
+    .string()
+    .min(8, "La password deve contenere almeno 8 caratteri")
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+      "La password deve contenere almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale @$!%*?&"
+    ),
+  confirmPassword: z.string().min(1, "Conferma password richiesta"),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Le password non corrispondono",
+  path: ["confirmPassword"],
+});
+
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
+export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;

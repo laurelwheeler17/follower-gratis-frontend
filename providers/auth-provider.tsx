@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         setToken(accessToken);
         setUser(user);
-        toast.success("Login successful!");
+        toast.success("Accesso riuscito!");
 
         if (user?.role == "admin") {
           router.push("/admin");
@@ -93,7 +93,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (response.data.status === "success") {
-        toast.success("Registration successful! Please log in.");
+        toast.success("Registrazione completata con successo! Effettua il login.");
         router.push("/login");
       }
     } catch (error) {
@@ -110,7 +110,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setToken(null);
     setUser(null);
     router.push("/login");
-    toast.success("Logged out successfully!");
+    toast.success("Disconnessione avvenuta con successo!");
   };
 
   return (

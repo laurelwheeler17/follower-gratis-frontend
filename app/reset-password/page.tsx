@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuth } from "@/providers/auth-provider";
-import { loginSchema, type LoginFormData } from "@/schemas/auth";
+import { useSearchParams, useRouter } from "next/navigation";
+import { resetPasswordSchema, type ResetPasswordFormData } from "@/schemas/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,26 +19,47 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { CardFooter } from "@/components/ui/card";
 import { toast } from "react-toastify";
+import api from "@/lib/axios";
 
-// Update the CardContent to include CardFooter
-export default function LoginPage() {
+export default function ResetPasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const [token, setToken] = useState<string>("");
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+  useEffect(() => {
+    const tokenFromUrl = searchParams.get("token");
+    if (tokenFromUrl) {
+      setToken(tokenFromUrl);
+    } else {
+      toast.error("Token di reset password non valido");
+      router.push("/forgot-password");
+    }
+  }, [searchParams, router]);
+
+  const onSubmit = async (data: ResetPasswordFormData) => {
     setIsLoading(true);
     try {
-      await login(data.email, data.password);
-    } catch (error) {
-      toast.error("Si è verificato un errore durante l'accesso");
+      const response = await api.post("/auth/reset-password", {
+        token,
+        newPassword: data.newPassword,
+      });
+      
+      if (response.data.status === "success") {
+        toast.success("Password reimpostata con successo!");
+        router.push("/login");
+      }
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || "Si è verificato un errore durante il reset della password";
+      toast.error(errorMessage);
       console.log(error);
     } finally {
       setIsLoading(false);
@@ -50,52 +71,53 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 text-white font-bold text-xl">
-              T
-            </div>
+            <span className="text-2xl font-bold text-slate-800 mr-2">
+              <span className="text-[#2150C2]">Follower</span>
+              <span className="text-[#CD41B4]">Gratis</span>
+            </span>
           </div>
-          <CardTitle className="text-2xl">Bentornato</CardTitle>
-          <CardDescription>Accedi al tuo account TopSMM</CardDescription>
+          <CardTitle className="text-2xl">Reimposta Password</CardTitle>
+          <CardDescription>Inserisci la tua nuova password</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="newPassword">Nuova Password</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="Inserisci la tua email"
-                {...register("email")}
+                id="newPassword"
+                type="password"
+                placeholder="Inserisci la nuova password"
+                {...register("newPassword")}
               />
-              {errors.email && (
-                <p className="text-sm text-red-600">{errors.email.message}</p>
+              {errors.newPassword && (
+                <p className="text-sm text-red-600">{errors.newPassword.message}</p>
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="confirmPassword">Conferma Password</Label>
               <Input
-                id="password"
+                id="confirmPassword"
                 type="password"
-                placeholder="Inserisci la tua password"
-                {...register("password")}
+                placeholder="Conferma la nuova password"
+                {...register("confirmPassword")}
               />
-              {errors.password && (
+              {errors.confirmPassword && (
                 <p className="text-sm text-red-600">
-                  {errors.password.message}
+                  {errors.confirmPassword.message}
                 </p>
               )}
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Accedi
+              Reimposta Password
             </Button>
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
-            Non hai un account?{" "}
-            <Link href="/register" className="text-blue-600 hover:underline">
-              Registrati
+            Ricordi la tua password?{" "}
+            <Link href="/login" className="text-blue-600 hover:underline">
+              Accedi
             </Link>
           </p>
         </CardFooter>

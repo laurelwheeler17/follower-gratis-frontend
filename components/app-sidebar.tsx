@@ -39,7 +39,7 @@ export function AppSidebar({ roleRoute }: AppSidebarProps) {
 
   const navigation = [
     {
-      title: "Cruscotto",
+      title: "Dashboard",
       url: `/${roleRoute}`,
       icon: LayoutDashboard,
       roles: ["dashboard", "admin"],
@@ -83,11 +83,14 @@ export function AppSidebar({ roleRoute }: AppSidebarProps) {
   return (
     <Sidebar variant="inset">
       <SidebarHeader>
-        <div className="flex items-center gap-2 px-4 py-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white font-bold">
-            T
-          </div>
-          <span className="font-semibold text-lg">TopSMM Panel</span>
+        <div className="flex items-center gap-2 py-2">
+          <p className="font-semibold text-lg ">
+            <span className="text-slate-800 mr-2">
+              <span className="text-[#2150C2]">Follower</span>
+              <span className="text-[#CD41B4]">Gratis</span>
+            </span>
+            <span>Panel</span>
+          </p>
         </div>
       </SidebarHeader>
       <SidebarContent>

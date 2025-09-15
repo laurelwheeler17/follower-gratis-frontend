@@ -51,12 +51,13 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 text-white font-bold text-xl">
-              T
-            </div>
+            <span className="text-2xl font-bold text-slate-800 mr-2">
+              <span className="text-[#2150C2]">Follower</span>
+              <span className="text-[#CD41B4]">Gratis</span>
+            </span>
           </div>
           <CardTitle className="text-2xl">Bentornato</CardTitle>
-          <CardDescription>Accedi al tuo account TopSMM</CardDescription>
+          <CardDescription>Accedi al tuo account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -86,10 +87,16 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground"
-                  aria-label={showPassword ? "Nascondi password" : "Mostra password"}
+                  aria-label={
+                    showPassword ? "Nascondi password" : "Mostra password"
+                  }
                   title={showPassword ? "Nascondi password" : "Mostra password"}
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
               {errors.password && (
@@ -112,7 +119,10 @@ export default function LoginPage() {
             </Link>
           </p>
           <p className="text-sm text-muted-foreground">
-            <Link href="/forgot-password" className="text-blue-600 hover:underline">
+            <Link
+              href="/forgot-password"
+              className="text-blue-600 hover:underline"
+            >
               Password dimenticata?
             </Link>
           </p>

@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { forgotPasswordSchema, type ForgotPasswordFormData } from "@/schemas/auth";
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordFormData,
+} from "@/schemas/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -45,7 +48,7 @@ export default function ForgotPasswordPage() {
       }
     } catch (error: any) {
       console.error("Password reset error:", error);
-      
+
       if (error.response?.status === 400) {
         toast.error("Email non valida. Controlla i dati inseriti.");
       } else if (error.response?.status === 403) {
@@ -74,10 +77,15 @@ export default function ForgotPasswordPage() {
           <CardContent>
             <div className="space-y-4">
               <div className="text-center text-sm text-muted-foreground">
-                <p>Ti abbiamo inviato un'email con le istruzioni per reimpostare la tua password.</p>
-                <p className="mt-2">Controlla anche la cartella spam se non trovi l'email.</p>
+                <p>
+                  Ti abbiamo inviato un'email con le istruzioni per reimpostare
+                  la tua password.
+                </p>
+                <p className="mt-2">
+                  Controlla anche la cartella spam se non trovi l'email.
+                </p>
               </div>
-              
+
               <Button asChild className="w-full">
                 <Link href="/login">
                   <ArrowLeft className="mr-2 h-4 w-4" />
@@ -89,7 +97,7 @@ export default function ForgotPasswordPage() {
           <CardFooter className="flex justify-center">
             <p className="text-sm text-muted-foreground">
               Non hai ricevuto l'email?{" "}
-              <button 
+              <button
                 onClick={() => setIsEmailSent(false)}
                 className="text-blue-600 hover:underline"
               >
@@ -107,12 +115,15 @@ export default function ForgotPasswordPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 text-white font-bold text-xl">
-              T
-            </div>
+            <span className="text-2xl font-bold text-slate-800 mr-2">
+              <span className="text-[#2150C2]">Follower</span>
+              <span className="text-[#CD41B4]">Gratis</span>
+            </span>
           </div>
           <CardTitle className="text-2xl">Password Dimenticata</CardTitle>
-          <CardDescription>Inserisci la tua email per reimpostare la password</CardDescription>
+          <CardDescription>
+            Inserisci la tua email per reimpostare la password
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
