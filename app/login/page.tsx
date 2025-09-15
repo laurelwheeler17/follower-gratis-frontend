@@ -19,6 +19,7 @@ import { Loader2, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { CardFooter } from "@/components/ui/card";
 import { toast } from "react-toastify";
+import Head from "next/head";
 
 // Update the CardContent to include CardFooter
 export default function LoginPage() {
@@ -47,8 +48,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Card className="w-full max-w-md">
+    <>
+      <Head>
+        <title>Accedi a FollowerGratis.it - Area Utenti</title>
+        <meta 
+          name="description" 
+          content="Entra nella tua area personale su FollowerGratis.it per gestire i tuoi servizi e monitorare i tuoi progressi in pochi click." 
+        />
+      </Head>
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <span className="text-2xl font-bold text-slate-800 mr-2">
@@ -128,6 +137,7 @@ export default function LoginPage() {
           </p>
         </CardFooter>
       </Card>
-    </div>
+      </div>
+    </>
   );
 }

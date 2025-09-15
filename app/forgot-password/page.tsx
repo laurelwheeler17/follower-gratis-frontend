@@ -22,6 +22,7 @@ import Link from "next/link";
 import { CardFooter } from "@/components/ui/card";
 import { toast } from "react-toastify";
 import api from "@/lib/axios";
+import Head from "next/head";
 
 export default function ForgotPasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +64,15 @@ export default function ForgotPasswordPage() {
 
   if (isEmailSent) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <>
+        <Head>
+          <title>Reimposta la tua password - FollowerGratis.it</title>
+          <meta 
+            name="description" 
+            content="Hai dimenticato la password? Reimposta facilmente l'accesso al tuo account FollowerGratis.it in pochi secondi." 
+          />
+        </Head>
+        <div className="min-h-screen flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
@@ -106,12 +115,21 @@ export default function ForgotPasswordPage() {
             </p>
           </CardFooter>
         </Card>
-      </div>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <>
+      <Head>
+        <title>Reimposta la tua password - FollowerGratis.it</title>
+        <meta 
+          name="description" 
+          content="Hai dimenticato la password? Reimposta facilmente l'accesso al tuo account FollowerGratis.it in pochi secondi." 
+        />
+      </Head>
+      <div className="min-h-screen flex items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
@@ -154,6 +172,7 @@ export default function ForgotPasswordPage() {
           </p>
         </CardFooter>
       </Card>
-    </div>
+      </div>
+    </>
   );
 }

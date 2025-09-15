@@ -20,6 +20,7 @@ import Link from "next/link";
 import { CardFooter } from "@/components/ui/card";
 import { toast } from "react-toastify";
 import api from "@/lib/axios";
+import Head from "next/head";
 
 function ResetPasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -67,16 +68,24 @@ function ResetPasswordForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <span className="text-2xl font-bold text-slate-800 mr-2">
-              <span className="text-[#2150C2]">Follower</span>
-              <span className="text-[#CD41B4]">Gratis</span>
-            </span>
-          </div>
-          <CardTitle className="text-2xl">Reimposta Password</CardTitle>
+    <>
+      <Head>
+        <title>Reimposta la tua password - FollowerGratis.it</title>
+        <meta 
+          name="description" 
+          content="Hai dimenticato la password? Reimposta facilmente l'accesso al tuo account FollowerGratis.it in pochi secondi." 
+        />
+      </Head>
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <span className="text-2xl font-bold text-slate-800 mr-2">
+                <span className="text-[#2150C2]">Follower</span>
+                <span className="text-[#CD41B4]">Gratis</span>
+              </span>
+            </div>
+            <CardTitle className="text-2xl">Reimposta Password</CardTitle>
           <CardDescription>Inserisci la tua nuova password</CardDescription>
         </CardHeader>
         <CardContent>
@@ -122,29 +131,39 @@ function ResetPasswordForm() {
           </p>
         </CardFooter>
       </Card>
-    </div>
+      </div>
+    </>
   );
 }
 
 function LoadingFallback() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <span className="text-2xl font-bold text-slate-800 mr-2">
-              <span className="text-[#2150C2]">Follower</span>
-              <span className="text-[#CD41B4]">Gratis</span>
-            </span>
-          </div>
-          <CardTitle className="text-2xl">Reimposta Password</CardTitle>
-          <CardDescription>Caricamento...</CardDescription>
-        </CardHeader>
-        <CardContent className="flex justify-center">
-          <Loader2 className="h-8 w-8 animate-spin" />
-        </CardContent>
-      </Card>
-    </div>
+    <>
+      <Head>
+        <title>Reimposta la tua password - FollowerGratis.it</title>
+        <meta 
+          name="description" 
+          content="Hai dimenticato la password? Reimposta facilmente l'accesso al tuo account FollowerGratis.it in pochi secondi." 
+        />
+      </Head>
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <span className="text-2xl font-bold text-slate-800 mr-2">
+                <span className="text-[#2150C2]">Follower</span>
+                <span className="text-[#CD41B4]">Gratis</span>
+              </span>
+            </div>
+            <CardTitle className="text-2xl">Reimposta Password</CardTitle>
+            <CardDescription>Caricamento...</CardDescription>
+          </CardHeader>
+          <CardContent className="flex justify-center">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 }
 
