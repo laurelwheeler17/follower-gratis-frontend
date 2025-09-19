@@ -45,6 +45,8 @@ import {
   ExternalLink,
   Package,
   Filter,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { format } from "@/lib/date-utils";
 
@@ -90,6 +92,8 @@ export default function OrdersPage() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const servicesMap = useMemo(() => {
     return services.reduce((acc, service) => {
@@ -110,6 +114,19 @@ export default function OrdersPage() {
       return matchesSearch && matchesStatus;
     });
   }, [orders, searchTerm, statusFilter]);
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
+
+  // Reset to first page when filters change
+  const handleFilterChange = (newSearchTerm: string, newStatusFilter: string) => {
+    setSearchTerm(newSearchTerm);
+    setStatusFilter(newStatusFilter);
+    setCurrentPage(1);
+  };
 
   const stats = useMemo(() => {
     const totalOrders = orders.length;
@@ -212,11 +229,11 @@ export default function OrdersPage() {
               <Input
                 placeholder="Cerca per ID ordine o link..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => handleFilterChange(e.target.value, statusFilter)}
                 className="pl-10"
               />
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <Select value={statusFilter} onValueChange={(value) => handleFilterChange(searchTerm, value)}>
               <SelectTrigger className="w-48">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="Filtra per stato" />
@@ -233,10 +250,7 @@ export default function OrdersPage() {
             {(searchTerm || statusFilter !== "all") && (
               <Button
                 variant="outline"
-                onClick={() => {
-                  setSearchTerm("");
-                  setStatusFilter("all");
-                }}
+                onClick={() => handleFilterChange("", "all")}
               >
                 <X className="h-4 w-4 mr-2" />
                 Pulisci
@@ -249,10 +263,31 @@ export default function OrdersPage() {
       {/* Tabella ordini */}
       <Card>
         <CardHeader>
-          <CardTitle>Storico ordini</CardTitle>
-          <CardDescription>
-            {filteredOrders.length} di {orders.length} ordini
-          </CardDescription>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <CardTitle>Storico ordini</CardTitle>
+              <CardDescription>
+                {filteredOrders.length} di {orders.length} ordini
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">Righe per pagina:</span>
+              <Select value={itemsPerPage.toString()} onValueChange={(value) => {
+                setItemsPerPage(Number(value));
+                setCurrentPage(1);
+              }}>
+                <SelectTrigger className="w-20">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5</SelectItem>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           {filteredOrders.length > 0 ? (
@@ -269,7 +304,7 @@ export default function OrdersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredOrders.map((order, index) => {
+                {paginatedOrders.map((order, index) => {
                   const StatusIcon =
                     statusConfig[order.status]?.icon || AlertCircle;
                   const service = servicesMap[order.service];
@@ -366,6 +401,63 @@ export default function OrdersPage() {
                   ? "Prova a modificare i criteri di ricerca o di filtro"
                   : "Non hai ancora effettuato alcun ordine"}
               </p>
+            </div>
+          )}
+          
+          {/* Pagination Controls */}
+          {filteredOrders.length > 0 && totalPages > 1 && (
+            <div className="flex items-center justify-between px-2 py-4">
+              <div className="text-sm text-muted-foreground">
+                Mostrando {startIndex + 1} - {Math.min(endIndex, filteredOrders.length)} di {filteredOrders.length} ordini
+              </div>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Precedente
+                </Button>
+                
+                <div className="flex items-center space-x-1">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+                    
+                    return (
+                      <Button
+                        key={pageNum}
+                        variant={currentPage === pageNum ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(pageNum)}
+                        className="w-8 h-8 p-0"
+                      >
+                        {pageNum}
+                      </Button>
+                    );
+                  })}
+                </div>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  Successiva
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           )}
         </CardContent>
